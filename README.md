@@ -5,7 +5,11 @@
 - Install [`poetry`](https://python-poetry.org/docs/#installing-with-the-official-installer)
 - Activate the virtual environment
   ```sh
-	source $(poetry env info --path)/bin/activate
+  source $(poetry env info --path)/bin/activate
+  ```
+- Activate `pre-commit` hooks
+  ```sh
+  pre-commit install
   ```
 
 ## Tools
