@@ -1,3 +1,5 @@
+name: Train Model
+
 on:
   - workflow_dispatch
   - pull_request:
