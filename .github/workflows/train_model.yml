@@ -1,0 +1,37 @@
+on:
+  - workflow_dispatch
+  - pull_request:
+      branches: ["main"]
+      types: ["closed"]
+      paths:
+        - src/**
+
+jobs:
+  train-model:
+    if: ${{ github.event.pull_request.merged  }} # not all closed PRs are merged
+    env:
+      CLEARML_API_ACCESS_KEY: ${{ secrets.ACCESS_KEY  }}
+      CLEARML_API_SECRET_KEY: ${{ secrets.SECRET_KEY  }}
+      CLEARML_API_HOST: ${{ secrets.API_HOST  }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.8.3"
+      - name: Setup poetry
+        run: |
+          poetry config virtualenvs.create true --local
+          poetry config virtualenvs.in-project true --local
+      - uses: actions/cache@v3
+        name: Cache dependencies
+        with:
+          path: ./.venv
+          key: venv-${{ hashFiles('poetry.lock') }}
+      - name: Install dependencies
+        run: poetry install
+      - name: Train model
+        run: make train

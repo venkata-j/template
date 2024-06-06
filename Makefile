@@ -3,3 +3,6 @@ lint:
 
 test:
 	poetry run pytest ./tests/test.py
+
+train:
+	poetry run python3 src/main.py
